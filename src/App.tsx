@@ -23,18 +23,12 @@ function useHashRoute() {
   };
 }
 
-function countByCategory(visited: Set<string>) {
-  const counts = new Map<AccessCategoryId, number>();
-  set.spots.forEach((spot) => {
-    if (visited.has(spot.id)) counts.set(spot.access, (counts.get(spot.access) ?? 0) + 1);
-  });
-  return counts;
+function countSpots(visited: Set<string>, categories: AccessCategoryId[]) {
+  return set.spots.filter((spot) => categories.includes(spot.access) && visited.has(spot.id)).length;
 }
 
-function totalByCategory() {
-  const totals = new Map<AccessCategoryId, number>();
-  set.spots.forEach((spot) => totals.set(spot.access, (totals.get(spot.access) ?? 0) + 1));
-  return totals;
+function totalSpots(categories: AccessCategoryId[]) {
+  return set.spots.filter((spot) => categories.includes(spot.access)).length;
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -164,8 +158,26 @@ function RecordPage() {
 function ResultPage({ encoded }: { encoded: string | null }) {
   const visited = useMemo(() => (encoded ? decodeSelection(set, encoded) : loadSelection(set)), [encoded]);
   const encodedForShare = useMemo(() => encoded ?? encodeSelection(set, visited), [encoded, visited]);
-  const counts = countByCategory(visited);
-  const totals = totalByCategory();
+  const summaryGroups = [
+    {
+      id: "all",
+      label: "全区分",
+      categories: ["automobileOnly", "motorOnly", "unrestricted"] satisfies AccessCategoryId[],
+      color: "#10231f",
+    },
+    {
+      id: "motor",
+      label: "自動車専用 + 車・二輪中心",
+      categories: ["automobileOnly", "motorOnly"] satisfies AccessCategoryId[],
+      color: "#7A4B22",
+    },
+    {
+      id: "open",
+      label: "制限なし",
+      categories: ["unrestricted"] satisfies AccessCategoryId[],
+      color: "#2D9D78",
+    },
+  ];
   const shareUrl = absoluteResultUrl(encodedForShare);
   const tweetText = set.shareText(visited.size);
   const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(tweetText)}&url=${encodeURIComponent(shareUrl)}`;
@@ -197,14 +209,14 @@ function ResultPage({ encoded }: { encoded: string | null }) {
         <MapPanel set={set} visited={visited} compact />
 
         <section className="summary-panel" aria-label="踏破数">
-          {set.categories.map((category) => {
-            const count = counts.get(category.id) ?? 0;
-            const total = totals.get(category.id) ?? 0;
+          {summaryGroups.map((group) => {
+            const count = countSpots(visited, group.categories);
+            const total = totalSpots(group.categories);
             const percent = total === 0 ? 0 : Math.floor((count / total) * 100);
             return (
-              <article key={category.id} className="summary-card">
-                <span className="summary-dot" style={{ backgroundColor: category.color }} />
-                <h2>{category.label}</h2>
+              <article key={group.id} className="summary-card">
+                <span className="summary-dot" style={{ backgroundColor: group.color }} />
+                <h2>{group.label}</h2>
                 <strong>
                   {count} / {total} 本
                 </strong>

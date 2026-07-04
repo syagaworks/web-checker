@@ -12,7 +12,9 @@ type Props = {
 };
 
 function markerHtml(color: string, visited: boolean) {
-  return `<span class="map-marker ${visited ? "map-marker-visited" : ""}" style="--marker-color:${visited ? "#171717" : color}"></span>`;
+  return `<span class="map-marker ${visited ? "map-marker-visited" : ""}" style="--marker-color:${color}">${
+    visited ? "✓" : ""
+  }</span>`;
 }
 
 export function MapPanel({ set, visited = new Set(), selectedId, onSelect, compact = false }: Props) {

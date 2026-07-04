@@ -145,23 +145,41 @@ h1 {
 }
 
 .visited-dot {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
   background: #171717;
 }
 
+.visited-dot::after {
+  content: "✓";
+  color: #fffaf1;
+  font-size: 8px;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .map-marker {
-  display: block;
+  display: grid;
   width: 18px;
   height: 18px;
+  place-items: center;
   border: 2px solid #fffaf1;
   border-radius: 999px;
   background: var(--marker-color);
+  color: transparent;
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
   box-shadow: 0 2px 10px rgba(15, 22, 20, 0.35);
 }
 
 .map-marker-visited {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-width: 3px;
+  background: #171717;
+  color: #fffaf1;
 }
 
 .spot-detail {

@@ -6,11 +6,11 @@ export const hyakumeido2020: SpotSet = {
   title: "日本百名道2020 踏破記録",
   shortTitle: "日本百名道2020",
   intro:
-    "全国の景観道路をめぐるための、非公式の記録ツールです。道名などの事実情報は日本百名道2020の一覧を参照し、紹介文や写真はWikipedia/Wikimedia Commonsの情報をもとに表示します。",
+    "全国の景観道路をめぐるための、非公式の記録ツールです。",
   sourceLabel: "日本百名道2020",
   sourceUrl: "http://www.sudo2.com/ga01/index.html",
   footerNotice:
-    "本ページは須藤英一さんおよび日本百名道2020公式ページとは関係のない、個人が趣味で作成した非公式ページです。問題があれば公開を停止・削除します。",
+    "本ページは須藤英一さんおよび日本百名道2020公式ページとは関係のない、個人が趣味で作成した非公式ページです。",
   mapCenter: [36.6, 138.2],
   mapZoom: 5,
   shareText: (count) => `日本百名道2020を${count}本踏破しました`,

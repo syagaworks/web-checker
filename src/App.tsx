@@ -49,13 +49,19 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 
 function HomePage() {
+  const [mainTitle, subTitle] = set.title.split(" ");
+
   return (
     <Shell>
       <main>
         <section className="hero">
           <div>
             <p className="eyebrow">非公式トラッカー</p>
-            <h1>{set.title}</h1>
+            <h1>
+              {mainTitle}
+              <br />
+              {subTitle}
+            </h1>
             <p>{set.intro}</p>
           </div>
         </section>
@@ -199,11 +205,7 @@ function ResultPage({ encoded }: { encoded: string | null }) {
         <section className="page-heading">
           <p className="eyebrow">{encoded ? "共有された確認画面" : "保存済み記録"}</p>
           <h1>{set.shareText(visited.size)}</h1>
-          <p>
-            {encoded
-              ? "URL内の共有データを表示しています。この画面を開いても、あなたの端末の保存記録は上書きされません。"
-              : "この端末に保存された記録を表示しています。"}
-          </p>
+          {!encoded && <p>この端末に保存された記録を表示しています。</p>}
         </section>
 
         <MapPanel set={set} visited={visited} />

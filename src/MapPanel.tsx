@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import L from "leaflet";
+import { Maximize2, Minimize2 } from "lucide-react";
 import type { Spot, SpotSet } from "./types";
 import { fetchWikiDetails, type WikiDetails } from "./wiki";
 
@@ -25,6 +26,7 @@ export function MapPanel({ set, visited = new Set(), selectedId, onSelect, compa
   const [details, setDetails] = useState<WikiDetails | null>(null);
   const [loading, setLoading] = useState(false);
   const [wikiError, setWikiError] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
 
   const categoryById = useMemo(() => new Map(set.categories.map((category) => [category.id, category])), [set.categories]);
 
@@ -106,12 +108,38 @@ export function MapPanel({ set, visited = new Set(), selectedId, onSelect, compa
     };
   }, [activeSpot]);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => mapRef.current?.invalidateSize(), 180);
+    return () => window.clearTimeout(timer);
+  }, [fullscreen, compact]);
+
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setFullscreen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [fullscreen]);
+
   const category = categoryById.get(activeSpot.access);
 
   return (
-    <section className={`map-panel ${compact ? "map-panel-compact" : ""}`} aria-label="道路マップ">
+    <section
+      className={`map-panel ${compact ? "map-panel-compact" : ""} ${fullscreen ? "map-panel-fullscreen" : ""}`}
+      aria-label="道路マップ"
+    >
       <div className="map-wrap">
         <div ref={nodeRef} className="leaflet-host" />
+        <button
+          type="button"
+          className="map-fullscreen-button"
+          onClick={() => setFullscreen((current) => !current)}
+          aria-label={fullscreen ? "マップを元の大きさに戻す" : "マップを全画面表示する"}
+        >
+          {fullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+          <span>{fullscreen ? "戻す" : "全画面"}</span>
+        </button>
         <div className="legend" aria-label="凡例">
           {set.categories.map((item) => (
             <span key={item.id}>

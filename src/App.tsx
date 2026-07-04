@@ -65,7 +65,7 @@ function HomePage() {
         <div className="primary-action-row">
           <a className="primary-action" href="#/record">
             <MapPinned size={22} />
-            記録を作成する
+            踏破を記録する
           </a>
         </div>
       </main>
@@ -206,7 +206,7 @@ function ResultPage({ encoded }: { encoded: string | null }) {
           </p>
         </section>
 
-        <MapPanel set={set} visited={visited} compact />
+        <MapPanel set={set} visited={visited} />
 
         <section className="summary-panel" aria-label="踏破数">
           {summaryGroups.map((group) => {

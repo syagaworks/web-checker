@@ -173,9 +173,9 @@ function ResultPage({ encoded }: { encoded: string | null }) {
     },
     {
       id: "motor",
-      label: "自動車専用 + 車・二輪中心",
-      categories: ["automobileOnly", "motorOnly"] satisfies AccessCategoryId[],
-      color: "#7A4B22",
+      label: "車・バイク + 制限なし",
+      categories: ["motorOnly", "unrestricted"] satisfies AccessCategoryId[],
+      color: "#23575C",
     },
     {
       id: "open",

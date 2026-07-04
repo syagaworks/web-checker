@@ -24,8 +24,8 @@ export const hyakumeido2020: SpotSet = {
     },
     {
       id: "motorOnly",
-      label: "自動車・バイク・原付のみ",
-      shortLabel: "車・二輪中心",
+      label: "車・バイク",
+      shortLabel: "車・バイク",
       color: "#2C7BE5",
       description: "歩行者や自転車の通行制限がある、または有料観光道路として運用されるもの",
     },
